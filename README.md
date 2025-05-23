@@ -82,14 +82,6 @@ src/
 - File previews
 - Progress indicators
 
-## Development
-
-### Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
 
 ### File Upload Support
 
@@ -102,14 +94,7 @@ Supported file types:
 - CSV files (.csv)
 - Images (.jpg, .png, .gif)
 
-### Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a pull request
+## Demo
 
-## License
-
-MIT License - feel free to use this project for personal or commercial purposes.
+![Image](https://github.com/user-attachments/assets/9b401257-9ae8-47f8-b3de-e2702f001f07)
