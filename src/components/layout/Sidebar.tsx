@@ -13,10 +13,40 @@ import { useUI } from '../../contexts/UIContext';
 
 const Sidebar: React.FC = () => {
   const { currentFolder, setCurrentFolder } = useDocuments();
-  const { isSidebarOpen, openModal } = useUI();
+  const { isSidebarOpen, openModal, toggleSidebar } = useUI();
   
   const handleNewClick = () => {
     openModal('upload');
+  };
+
+  const handleNavClick = (type: string) => {
+    switch (type) {
+      case 'myDrive':
+        setCurrentFolder(null);
+        break;
+      case 'shared':
+        // Filter shared documents
+        // TODO: Update UI to show shared documents
+        // This is a placeholder for the actual implementation
+        break;
+      case 'starred':
+        // Filter starred documents
+        // TODO: Update UI to show starred documents
+        // This is a placeholder for the actual implementation
+        break;
+      case 'recent':
+        // Sort by most recent
+        // TODO: Update UI to show recent documents
+        break;
+      case 'trash':
+        // Show trash
+        // TODO: Implement trash functionality
+        break;
+    }
+
+    if (window.innerWidth < 640) { // sm breakpoint
+      toggleSidebar();
+    }
   };
   
   if (!isSidebarOpen) return null;
@@ -37,7 +67,7 @@ const Sidebar: React.FC = () => {
         <ul>
           <li>
             <button
-              onClick={() => setCurrentFolder(null)}
+              onClick={() => handleNavClick('myDrive')}
               className={`flex items-center w-full px-4 sm:px-6 py-2 sm:py-3 text-sm ${
                 currentFolder === null ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-700 hover:bg-gray-100'
               } transition-colors rounded-r-full`}
@@ -48,6 +78,7 @@ const Sidebar: React.FC = () => {
           </li>
           <li>
             <button
+              onClick={() => handleNavClick('shared')}
               className="flex items-center w-full px-4 sm:px-6 py-2 sm:py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors rounded-r-full"
             >
               <Share size={18} className="mr-3 text-gray-500" />
@@ -56,6 +87,7 @@ const Sidebar: React.FC = () => {
           </li>
           <li>
             <button
+              onClick={() => handleNavClick('starred')}
               className="flex items-center w-full px-4 sm:px-6 py-2 sm:py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors rounded-r-full"
             >
               <Star size={18} className="mr-3 text-gray-500" />
@@ -64,6 +96,7 @@ const Sidebar: React.FC = () => {
           </li>
           <li>
             <button
+              onClick={() => handleNavClick('recent')}
               className="flex items-center w-full px-4 sm:px-6 py-2 sm:py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors rounded-r-full"
             >
               <Clock size={18} className="mr-3 text-gray-500" />
@@ -72,6 +105,7 @@ const Sidebar: React.FC = () => {
           </li>
           <li>
             <button
+              onClick={() => handleNavClick('trash')}
               className="flex items-center w-full px-4 sm:px-6 py-2 sm:py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors rounded-r-full"
             >
               <Trash2 size={18} className="mr-3 text-gray-500" />
