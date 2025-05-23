@@ -1,29 +1,23 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { Document, Folder, Tag, ViewMode, SortOption, SortDirection, User } from '../types';
+import type { Document, Folder, Tag, ViewMode, SortOption, SortDirection, User } from '../types/'
 import { documents, folders, tags, currentUser, users } from '../data/mockData';
 import { getFolderContents, getFolderPath } from '../lib/folderManagement';
 
+
 interface DocumentContextType {
-  // Current state
   currentFolder: string | null;
   folderPath: Folder[];
   folderContents: { folders: Folder[], documents: Document[] };
   currentUser: User;
   users: User[];
   isLoading: boolean;
-  
-  // View controls
   viewMode: ViewMode;
   sortOption: SortOption;
   sortDirection: SortDirection;
   searchQuery: string;
-  
-  // Data
   allDocuments: Document[];
   allFolders: Folder[];
   allTags: Tag[];
-  
-  // Actions
   setCurrentFolder: (folderId: string | null) => void;
   setViewMode: (mode: ViewMode) => void;
   setSortOption: (option: SortOption) => void;
@@ -47,12 +41,12 @@ export const DocumentProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Wrapped data objects so we can refresh them
   const [allDocuments, setAllDocuments] = useState<Document[]>(documents);
   const [allFolders, setAllFolders] = useState<Folder[]>(folders);
   const [allTags, setAllTags] = useState<Tag[]>(tags);
+  const [currentUserState] = useState<User>(currentUser);
+  const [usersState] = useState<User[]>(users);
 
-  // Function to refresh data
   const refreshData = () => {
     setAllDocuments([...documents]);
     setAllFolders([...folders]);
@@ -60,19 +54,17 @@ export const DocumentProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     loadFolderContents(currentFolder);
   };
 
-  // Load folder contents when current folder changes
   const loadFolderContents = async (folderId: string | null) => {
     setIsLoading(true);
     try {
       const contents = await getFolderContents(folderId);
       const path = await getFolderPath(folderId);
-      
-      // Sort the contents based on current sort settings
+
       const sortedContents = {
-        folders: sortItems(contents.folders, sortOption, sortDirection),
-        documents: sortItems(contents.documents, sortOption, sortDirection)
+        folders: sortItems<Folder>(contents.folders as Folder[], sortOption, sortDirection),
+        documents: sortItems<Document>(contents.documents as unknown as Document[], sortOption, sortDirection)
       };
-      
+
       setFolderContents(sortedContents);
       setFolderPath(path);
     } catch (error) {
@@ -82,7 +74,6 @@ export const DocumentProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
-  // Sort items based on sort option and direction
   const sortItems = <T extends Folder | Document>(
     items: T[],
     option: SortOption,
@@ -90,7 +81,7 @@ export const DocumentProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   ): T[] => {
     return [...items].sort((a, b) => {
       let comparison = 0;
-      
+
       switch (option) {
         case 'name':
           comparison = a.name.localeCompare(b.name);
@@ -99,39 +90,34 @@ export const DocumentProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           comparison = new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
           break;
         case 'size':
-          // Only applicable for documents
           if ('size' in a && 'size' in b) {
             comparison = (a.size as number) - (b.size as number);
           }
           break;
       }
-      
+
       return direction === 'asc' ? comparison : -comparison;
     });
   };
 
-  // Filter and sort the current folder contents whenever relevant state changes
   useEffect(() => {
     if (searchQuery) {
-      // If searching, search across all documents and folders
-      const filteredDocuments = allDocuments.filter(doc => 
+      const filteredDocuments = allDocuments.filter(doc =>
         doc.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      const filteredFolders = allFolders.filter(folder => 
+      const filteredFolders = allFolders.filter(folder =>
         folder.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      
+
       setFolderContents({
-        documents: sortItems(filteredDocuments, sortOption, sortDirection),
-        folders: sortItems(filteredFolders, sortOption, sortDirection)
+        documents: sortItems<Document>(filteredDocuments, sortOption, sortDirection),
+        folders: sortItems<Folder>(filteredFolders, sortOption, sortDirection)
       });
     } else {
-      // If not searching, reload the current folder contents
       loadFolderContents(currentFolder);
     }
   }, [currentFolder, searchQuery, sortOption, sortDirection]);
 
-  // Initial load
   useEffect(() => {
     loadFolderContents(null);
   }, []);
@@ -140,8 +126,8 @@ export const DocumentProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     currentFolder,
     folderPath,
     folderContents,
-    currentUser,
-    users,
+    currentUser: currentUserState,
+    users: usersState,
     isLoading,
     viewMode,
     sortOption,
@@ -167,7 +153,9 @@ export const DocumentProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     searchQuery,
     allDocuments,
     allFolders,
-    allTags
+    allTags,
+    currentUserState,
+    usersState
   ]);
 
   return (
