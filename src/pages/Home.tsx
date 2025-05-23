@@ -27,7 +27,6 @@ const Home: React.FC = () => {
   
   const handleSortChange = (option: SortOption) => {
     if (sortOption === option) {
-      // Toggle direction if same option is selected
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
       setSortOption(option);
@@ -39,25 +38,25 @@ const Home: React.FC = () => {
   const { folders, documents } = folderContents;
   
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-3 sm:p-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
         <Breadcrumb folderPath={folderPath} />
         
         <div className="flex items-center">
           <div className="relative mr-2">
             <button 
-              className="flex items-center px-3 py-2 text-sm text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+              className="flex items-center px-2 sm:px-3 py-1.5 sm:py-2 text-sm text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors min-w-[90px]"
               onClick={() => setIsSortMenuOpen(!isSortMenuOpen)}
             >
               {sortDirection === 'asc' ? <ArrowUpDown size={16} className="mr-1" /> : <ArrowDownUp size={16} className="mr-1" />}
-              <span>
-                {sortOption === 'name' ? 'Name' : sortOption === 'date' ? 'Last modified' : 'Size'}
+              <span className="truncate">
+                {sortOption === 'name' ? 'Name' : sortOption === 'date' ? 'Modified' : 'Size'}
               </span>
-              <ChevronDown size={16} className="ml-1" />
+              <ChevronDown size={16} className="ml-1 flex-shrink-0" />
             </button>
             
             {isSortMenuOpen && (
-              <div className="absolute right-0 mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+              <div className="absolute left-0 sm:right-0 sm:left-auto mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                 <ul className="py-1">
                   <li>
                     <button 
@@ -117,9 +116,9 @@ const Home: React.FC = () => {
         </div>
       </div>
       
-      <div className="flex items-center mb-4 space-x-2">
+      <div className="flex flex-col xs:flex-row items-stretch xs:items-center mb-4 space-y-2 xs:space-y-0 xs:space-x-2">
         <button
-          className="flex items-center px-4 py-2 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+          className="flex items-center justify-center px-4 py-2 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
           onClick={() => openModal('upload')}
         >
           <Plus size={16} className="mr-1" />
@@ -127,7 +126,7 @@ const Home: React.FC = () => {
         </button>
         
         <button
-          className="flex items-center px-4 py-2 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+          className="flex items-center justify-center px-4 py-2 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
           onClick={() => openModal('createFolder')}
         >
           <FolderPlus size={16} className="mr-1" />
@@ -141,7 +140,7 @@ const Home: React.FC = () => {
         </div>
       ) : (
         viewMode === 'grid' ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
             {folders.map(folder => (
               <FolderCard key={folder.id} folder={folder} />
             ))}
