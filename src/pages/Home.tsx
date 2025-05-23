@@ -5,7 +5,7 @@ import FileCard from '../components/ui/FileCard';
 import FolderCard from '../components/ui/FolderCard';
 import FileList from '../components/ui/FileList';
 import Breadcrumb from '../components/ui/Breadcrumb';
-import { SortOption, SortDirection } from '../types';
+import { SortOption } from '../types';
 import { useUI } from '../contexts/UIContext';
 
 const Home: React.FC = () => {

@@ -1,14 +1,10 @@
 import React from 'react';
 import { 
-  File, 
-  Folder, 
   Star, 
   Clock, 
   Share, 
   Cloud, 
   Trash2, 
-  Database, 
-  Upload, 
   Plus, 
   HardDrive 
 } from 'lucide-react';

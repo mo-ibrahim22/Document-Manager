@@ -14,7 +14,7 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { isSidebarOpen, modal } = useUI();
+  const { isSidebarOpen } = useUI();
   
   return (
     <div className="flex flex-col h-screen bg-gray-50">
